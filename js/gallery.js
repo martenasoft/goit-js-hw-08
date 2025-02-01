@@ -64,45 +64,28 @@ const images = [
     },
 ];
 
+let li = '';
+images.forEach(image => {
+    li += `<li class="gallery-item">
+                <a href="${image.original}" class="gallery-link" title="${image.description}">
+                    <img src="${image.preview}" alt="${image.description}" data-source="${image.original}" class="gallery-image">
+                </a>
+            </li>`;
+});
 
 const gallery = document.querySelector('.gallery');
+if (li !== '') {
+    gallery.innerHTML = li;
 
-images.forEach(image => {
-    const galleryItem = document.createElement('li');
-    galleryItem.classList.add('gallery-item');
+    gallery.addEventListener('click', function (e) {
+        if (e.target.nodeName === 'IMG') {
+            e.preventDefault();
+            const largeImageSrc = e.target.getAttribute('data-source');
 
-    const galleryLink = document.createElement('a');
-    galleryLink.classList.add('gallery-link');
-    galleryLink.href = image.original;
-
-    const galleryImage = document.createElement('img');
-    galleryImage.classList.add('gallery-image');
-    galleryImage.src = image.preview;
-    galleryImage.setAttribute('data-source', image.original);
-    galleryImage.alt = image.description;
-
-    galleryLink.appendChild(galleryImage);
-    galleryItem.appendChild(galleryLink);
-    gallery.appendChild(galleryItem);
-});
-
-gallery.addEventListener('click', function (e) {
-    if (e.target.nodeName === 'IMG') {
-        e.preventDefault();
-        const largeImageSrc = e.target.getAttribute('data-source');
-        console.log(largeImageSrc);
-    }
-});
-
-
-gallery.addEventListener('click', function (e) {
-    if (e.target.nodeName === 'IMG') {
-        e.preventDefault();
-        const largeImageSrc = e.target.getAttribute('data-source');
-
-        const modal = basicLightbox.create(`
+            const modal = basicLightbox.create(`
       <img src="${largeImageSrc}" alt="Image description">
     `);
-        modal.show();
-    }
-});
+            modal.show();
+        }
+    });
+}
